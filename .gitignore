@@ -1,3 +1,8 @@
+logstash-input-*
+logstash-filter-*
+logstash-outout-*
+.vagrant
+
 *.gem
 *.rbc
 /.config

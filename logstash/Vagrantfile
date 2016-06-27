@@ -1,0 +1,43 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+ # VirtualBox
+  config.vm.network :forwarded_port, guest: 5601, host: 5601
+  config.vm.network :forwarded_port, guest: 9200, host: 9200
+
+  config.vm.synced_folder "../data", "/vagrant_data"
+
+  config.omnibus.chef_version = "12.10.24"
+
+  config.vm.provider :virtualbox do |virtualbox, override|
+    override.vm.box = "bento/centos-6.7"
+    virtualbox.customize ["modifyvm", :id, "--memory", "2048"]
+  end
+
+  config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = ["cookbooks", "site-cookbooks"]
+    chef.add_recipe "yum"
+    chef.add_recipe "yum-epel"
+    chef.add_recipe "java"
+    chef.add_recipe "dstat"
+    chef.add_recipe "elasticsearch"
+    chef.add_recipe "kibana-rpm"
+    chef.add_recipe "ruby"
+    chef.add_recipe "logstash-rpm"
+    chef.json = {
+      :automatic => {
+        :ipaddress => "localhost"
+      },
+      :java => {
+        :install_flavor => "oracle",
+        :jdk_version => 8,
+        :oracle => {
+          :accept_oracle_download_terms => true
+        }
+      }
+    }
+  end
+end
