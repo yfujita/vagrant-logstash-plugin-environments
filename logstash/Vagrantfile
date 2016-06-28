@@ -28,6 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "ruby"
     chef.add_recipe "jruby"
     chef.add_recipe "logstash-rpm"
+    chef.add_recipe "vim"
     chef.json = {
       :automatic => {
         :ipaddress => "localhost"
