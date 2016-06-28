@@ -26,6 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "elasticsearch"
     chef.add_recipe "kibana-rpm"
     chef.add_recipe "ruby"
+    chef.add_recipe "jruby"
     chef.add_recipe "logstash-rpm"
     chef.json = {
       :automatic => {
