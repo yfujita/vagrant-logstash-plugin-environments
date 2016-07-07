@@ -21,8 +21,8 @@ bash 'jruby install' do
   wget #{JRUBY_URL}
   tar zxvf #{JRUBY_FILE_PATH}
   mv jruby-#{JRUBY_VERSION} #{JRUBY_PATH}
-  echo 'PATH="$PATH:/usr/local/jruby/bin"' >> "/etc/profile"
-  export PATH="$PATH:/usr/local/jruby/bin"
+  echo 'PATH="/usr/local/jruby/bin:$PATH"' >> "/etc/profile"
+  export PATH="/usr/local/jruby/bin:$PATH"
   jruby -S gem update --system
   jruby -S gem install bundler
   EOC
