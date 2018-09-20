@@ -2,9 +2,17 @@
 # vi: set ft=ruby :
 
 VAGRANTFILE_API_VERSION = "2"
+class CentOsInstallers < VagrantVbguest::Installers::RedHat
+  def install(opts=nil, &block)
+    communicate.sudo('yum -y install https://rpmfind.net/linux/centos/7.5.1804/updates/x86_64/Packages/kernel-devel-3.10.0-862.9.1.el7.x86_64.rpm', opts, &block)
+    super
+  end
+end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
- # VirtualBox
+  config.vm.box = "centos/7"
+  config.vbguest.installer = CentOsInstallers
+
   config.vm.network :forwarded_port, guest: 5601, host: 5601
   config.vm.network :forwarded_port, guest: 9200, host: 9200
 
@@ -12,34 +20,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.omnibus.chef_version = "12.10.24"
 
-  config.vm.provider :virtualbox do |virtualbox, override|
-    override.vm.box = "bento/centos-6.7"
-    virtualbox.customize ["modifyvm", :id, "--memory", "2048"]
-  end
-
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = ["cookbooks", "site-cookbooks"]
     chef.add_recipe "yum"
     chef.add_recipe "yum-epel"
     chef.add_recipe "java"
-    chef.add_recipe "dstat"
-    chef.add_recipe "elasticsearch"
-    chef.add_recipe "kibana-rpm"
     chef.add_recipe "ruby"
     chef.add_recipe "jruby"
     chef.add_recipe "logstash-rpm"
     chef.add_recipe "vim"
-    chef.json = {
-      :automatic => {
-        :ipaddress => "localhost"
-      },
-      :java => {
-        :install_flavor => "oracle",
-        :jdk_version => 8,
-        :oracle => {
-          :accept_oracle_download_terms => true
-        }
-      }
-    }
   end
 end
