@@ -7,12 +7,15 @@
 # All rights reserved - Do Not Redistribute
 #
 
-JRUBY_VERSION='1.7.23'
-JRUBY_FILE="jruby-bin-#{JRUBY_VERSION}.tar.gz"
+JRUBY_VERSION='9.2.0.0'
+JRUBY_FILE="jruby-dist-#{JRUBY_VERSION}-bin.tar.gz"
 JRUBY_FILE_PATH="/tmp/#{JRUBY_FILE}"
-JRUBY_URL="http://jruby.org.s3.amazonaws.com/downloads/#{JRUBY_VERSION}/#{JRUBY_FILE}"
+JRUBY_URL="https://repo1.maven.org/maven2/org/jruby/jruby-dist/#{JRUBY_VERSION}/#{JRUBY_FILE}"
 JRUBY_PATH='/usr/local/jruby'
 
+yum_package 'wget' do
+  action :upgrade
+end
 
 bash 'jruby install' do
   user "root"

@@ -7,6 +7,7 @@
 # All rights reserved - Do Not Redistribute
 #
 
+=begin
 cookbook_file "/tmp/ruby-1.9.3-p551-1.x86_64.rpm" do
   mode 00644
 end
@@ -59,6 +60,12 @@ rpm_package 'ruby' do
   source "/tmp/ruby-1.9.3-p551-1.x86_64.rpm"
   action :install
 end
+=end
+
+yum_package 'ruby' do
+  action :upgrade
+end
+
 
 bash 'update gem' do
   user "root"
